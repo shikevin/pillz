@@ -6,6 +6,7 @@ var router = express.Router();
 var handleNewPills = function(req, res) {
   var pills = req.body.pills;
   _.forEach(pills, function(n, key) {
+    pill = trackedPills[n];
   });
 };
 
