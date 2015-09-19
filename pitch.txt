@@ -1,0 +1,2 @@
+The healthcare industry loses billions every year because of mistakeningly eaten pills or missed dates. Pillz isn't just a regular container to store your pills, we ensure you take the right ones too at the right time.
+To make this happen, we created a comprehensive software and hardware solution that makes use of an android app with real-time imaging and overlays, server with scheduling and image recognition algorithms, a custom 3d printed pillbox, and a sparkcore set to make the hardware come alive.
