@@ -2,10 +2,13 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var errorhandler = require('errorhandler');
+var ws = require("nodejs-websocket")
 
 var apiRoutes = require('./routes/v1_router');
 
 app = exports.app = express();
+
+var pills = {};
 
 app.set('port', 5000);
 app.use(errorhandler({
@@ -34,3 +37,15 @@ var server = app.listen(app.get('port'), function() {
 server.on('error', function (err) {
     console.error(err);
 });
+
+// websocket server
+var server = ws.createServer(function (conn) {
+    console.log("New connection")
+    conn.on("text", function (str) {
+        console.log("Received "+str)
+        conn.sendText(str.toUpperCase()+"!!!")
+    })
+    conn.on("close", function (code, reason) {
+        console.log("Connection closed")
+    })
+}).listen(8001)
