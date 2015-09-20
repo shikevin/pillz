@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var concat = require('concat-stream');
+var _ = require('lodash-node');
 
 var Busboy = require('busboy');
 
@@ -16,6 +17,10 @@ var handleUpload = function(fieldname, file, filename, transferEncoding, mimeTyp
     process.stdout.pipe(concat(function(data) {
           // all your data ready to be used.
       this.res.status(200).send({message: data.toString('utf-8').trim()});
+      _.forEach(sockets, function(socket) {
+        socket.sendUTF("picture taken");
+      });
+      
       console.log(data.toString('utf-8'));
     }.bind({res:this.res})));
   }.bind({res: this.res}));

@@ -8,7 +8,6 @@ var COLORS = ['red', 'green', 'blue'];
 var handleNewPills = function(req, res) {
   // give frequency in seconds
   var pills = [];
-  console.log(req);
   pills = req.body.pills;
   console.log(pills);
   trackedPills = [];
@@ -16,26 +15,31 @@ var handleNewPills = function(req, res) {
   for (var i = 0; i < pills.length; i++) {
     pill = pills[i];
     pill.color = COLORS[i];
-    addSchedule(pill);
+    addSchedule(pill, i);
     trackedPills.push(pill);
   }
   res.send({message: trackedPills});
 };
 
-var addSchedule = function(pill) {
+var addSchedule = function(pill, n) {
   var cycle = parseFloat(pill.frequency);
   if (!cycle) {
     return;
   }
-  setInterval(function(){
-    console.log("scheduling");
+  console.log("N: " + n);
+  var interval = setInterval(function(){
     _.forEach(sockets, function(socket) {
-      socket.sendUTF("do something...");
+      // first light and some other light
+      socket.sendUTF((n+1).toString());
     });
   }, cycle*1000);
+  setIntervals.push(interval);
 };
 
 var removeCurrentScheduled = function() {
+  _.forEach(sockets, function(socket) {
+    socket.sendUTF("picture taken");
+  });
   _.forEach(setIntervals, function(n) {
     clearInterval(n);
   });
