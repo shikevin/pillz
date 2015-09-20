@@ -19,6 +19,12 @@ var handleNewPills = function(req, res) {
   res.send({message: trackedPills});
 };
 
+var getCurrentPills = function(req, res) {
+  res.send({message: trackedPills});
+}
+
 router.post('/', handleNewPills);
+
+router.get('/', getCurrentPills);
 
 module.exports = router;
