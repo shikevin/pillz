@@ -3,29 +3,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def get_mask_bounds(mask):
-
-    top = len(mask)
-    right = 0
-    bottom = 0
-    left = len(mask[0])
-
-    for row in mask:
-        for column in mask[row]: 
-            print mask[row][column]
-            if mask[row][column] == (255, 255, 255):
-                if top < row:
-                    top = row
-                if column > right:
-                    right = column
-                if bottom < row:
-                    bottom = row
-                if left > column:
-                    left = column
-
-    return top, right, bottom, left
-
-
 def water_shed_object_counting(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -51,61 +28,43 @@ def water_shed_object_counting(img):
 
     return len(contours)
 
-# 
-# modify this to take another image
-#
-img = cv2.imread('test1.JPG')
 
-# to be tweaked around
-colour_boundaries = {
-    'red': ([30, 30, 130], [130, 130, 255]),
-    'blue': ([130, 30, 30], [255, 130, 130]),
-    'green': ([0, 90, 0], [100, 210, 100])
-}
+def count_pills(picture_filename):
+    img = cv2.imread(picture_filename)
 
-
-pill_counts = {
-    'red': 0,
-    'blue': 0,
-    'green': 0,
-}
-
-for colour in colour_boundaries:
-
-    # create NumPy arrays from the boundaries
-    lower = np.array(colour_boundaries[colour][0], dtype = "uint8")
-    upper = np.array(colour_boundaries[colour][1], dtype = "uint8")
-
-    # print colour
-    # print colour_boundaries
-    # print colour_boundaries[colour]
-    # print colour_boundaries[colour][0]
-    # print colour_boundaries[colour][1]
-
-    # print lower
-    # print upper
-    
- 
-    # find the colors within the specified boundaries and apply the mask
-    colour_mask = cv2.inRange(img, lower, upper)
-
-    
-
-    # clean the noises
-    kernel = np.ones((80,80),np.uint8)
-    colour_mask_cleaned = cv2.morphologyEx(colour_mask, cv2.MORPH_CLOSE, kernel)
-
-    colour_region = cv2.bitwise_and(img, img, mask = colour_mask_cleaned)
+    # to be tweaked around
+    colour_boundaries = {
+        'red': ([30, 30, 130], [130, 130, 255]),
+        'blue': ([130, 30, 30], [255, 130, 130]),
+        'green': ([0, 90, 0], [100, 210, 100])
+    }
 
 
+    pill_counts = {
+        'red': 0,
+        'blue': 0,
+        'green': 0,
+    }
+
+    for colour in colour_boundaries:
+
+        # create NumPy arrays from the boundaries
+        lower = np.array(colour_boundaries[colour][0], dtype = "uint8")
+        upper = np.array(colour_boundaries[colour][1], dtype = "uint8")
+
+     
+        # find the colors within the specified boundaries and apply the mask
+        colour_mask = cv2.inRange(img, lower, upper)
 
 
-    pill_counts[colour] = water_shed_object_counting(colour_region)
+        # clean the noises
+        kernel = np.ones((80,80),np.uint8)
+        colour_mask_cleaned = cv2.morphologyEx(colour_mask, cv2.MORPH_CLOSE, kernel)
+
+        colour_region = cv2.bitwise_and(img, img, mask = colour_mask_cleaned)
 
 
+        pill_counts[colour] = water_shed_object_counting(colour_region)
 
-print pill_counts
+    return pill_counts
 
-
-
-# cv2.destroyAllWindows()
