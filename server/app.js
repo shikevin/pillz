@@ -1,16 +1,33 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
-var errorhandler = require('errorhandler');
 var ws = require("nodejs-websocket")
 
 var apiRoutes = require('./routes/v1_router');
 
 var net = require('net');
 
+state = 0;
+
 var server = net.createServer(function(socket) {
-    socket.write('Echo server\r\n');
-      socket.pipe(socket);
+  socket.communication = setInterval(function() {
+    var bytes = new Array(1);
+    bytes[0] = state
+      console.log('writing buffer');
+      socket.write(new Buffer(bytes));
+  }, 5000);
+
+  socket.on('data', function(data) {
+    console.log(data);
+  });
+
+  socket.on('end', function(data) {
+    clearInterval(socket.communication);
+  });
+
+  // write out 0-7 here
+    // socket.write('Echo server\r\n');
+    //   socket.pipe(socket);
 });
 
 server.listen(1337, '0.0.0.0');
@@ -20,10 +37,6 @@ app = exports.app = express();
 trackedPills = {};
 
 app.set('port', 5000);
-app.use(errorhandler({
-  dumpExceptions: true,
-  showStack: true
-}));
 app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -48,14 +61,15 @@ httpServer.on('error', function (err) {
     console.error(err);
 });
 // 
-// // websocket server
-// var server = ws.createServer(function (conn) {
-//     console.log("New connection")
-//     conn.on("text", function (str) {
-//         console.log("Received "+str)
-//         conn.sendText(str.toUpperCase()+"!!!")
-//     })
-//     conn.on("close", function (code, reason) {
-//         console.log("Connection closed")
-//     })
-// }).listen(8001)
+
+// websocket server
+var websocketServer = ws.createServer(function (conn) {
+    console.log("New connection")
+    conn.on("text", function (str) {
+        console.log("Received "+str)
+        conn.sendText(str.toUpperCase()+"!!!")
+    })
+    conn.on("close", function (code, reason) {
+        console.log("Connection closed")
+    })
+}).listen(8001)
