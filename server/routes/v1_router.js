@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var pillsRoute = require('./v1/pills');
+var imageRoute = require('./v1/image');
 // var browseRoute = require('./v1/browse'); 
 // var uploadRoute = require('./v1/upload');
 // var deleteRoute = require('./v1/delete');
@@ -11,6 +12,7 @@ var pillsRoute = require('./v1/pills');
 // var notifyRoute = require('./v1/notify');
 
 router.use('/pills', pillsRoute);
+router.use('/image', imageRoute);
 // router.use('/detail', browseRoute);
 // router.use('/delete', deleteRoute);
 // router.use('/upload', uploadRoute);
