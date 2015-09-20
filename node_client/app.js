@@ -1,4 +1,10 @@
 var WebSocketClient = require('websocket').client;
+var SerialPort = require("serialport").SerialPort;
+
+// make this the right serial port
+var serialPort = new SerialPort("/dev/tty-usbserial1", {
+    baudrate: 57600
+});
 
 var client = new WebSocketClient();
 
@@ -24,6 +30,7 @@ client.on('connect', function(connection) {
         if (connection.connected) {
             var number = Math.round(Math.random() * 0xFFFFFF);
             connection.sendUTF(number.toString());
+            console.log('sending number');
             setTimeout(sendNumber, 1000);
         }
     }

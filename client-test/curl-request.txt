@@ -1,0 +1,1 @@
+curl --data "pill=[{name:test}, {lol: test}, {hilarious: truth}]" http://52.89.88.229:5000/v1/pills
