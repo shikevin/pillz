@@ -1,7 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
-var ws = require("nodejs-websocket")
+var ws = require("nodejs-websocket");
+var spawn = require('child_process').spawn;
+var concat = require('concat-stream');
 
 var apiRoutes = require('./routes/v1_router');
 app = exports.app = express();
@@ -91,3 +93,11 @@ wsServer.on('request', function(request) {
         }
     });
 });
+
+var process = spawn('python',["../image-recognition/counting_objects.py"]);
+console.log("error?");
+
+process.stdout.pipe(concat(function(data) {
+      // all your data ready to be used.
+  console.log(data.toString('utf-8'));
+}));

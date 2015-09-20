@@ -9,8 +9,7 @@ var handleNewPills = function(req, res) {
   // give frequency in seconds
   var pills = [];
   pills = req.body.pills;
-  pills = req.body.pills;
-  console.log("PILLS: " + pills);
+  console.log(pills);
   trackedPills = [];
   removeCurrentScheduled();
   for (var i = 0; i < pills.length; i++) {
@@ -24,14 +23,15 @@ var handleNewPills = function(req, res) {
 
 var addSchedule = function(pill) {
   var cycle = parseFloat(pill.frequency);
-  if (!cycle && cycle !==0) {
-    setInterval(function(){
-      console.log("scheduling");
-      _.forEach(sockets, function(socket) {
-        socket.write("do something...");
-      });
-    }, cycle*1000);
+  if (!cycle) {
+    return;
   }
+  setInterval(function(){
+    console.log("scheduling");
+    _.forEach(sockets, function(socket) {
+      socket.sendUTF("do something...");
+    });
+  }, cycle*1000);
 };
 
 var removeCurrentScheduled = function() {
