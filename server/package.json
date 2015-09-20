@@ -12,6 +12,8 @@
     "body-parser": "^1.14.0",
     "ejs": "^2.3.4",
     "errorhandler": "^1.4.2",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "lodash-node": "^3.10.1",
+    "nodejs-websocket": "^1.4.0"
   }
 }
