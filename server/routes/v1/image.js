@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
+var spawn = require('child_process').spawn;
+var concat = require('concat-stream');
 
 var Busboy = require('busboy');
 
@@ -8,7 +10,14 @@ var handleUpload = function(fieldname, file, filename, transferEncoding, mimeTyp
   console.log('handling file upload');
   upload = fs.createWriteStream('./test2.JPG');
   upload.on('finish', function() {
-    this.res.status(200).send({message: "done"});
+    var process = spawn('python',["../image-recognition/counting_objects.py"]);
+    console.log("error?");
+
+    process.stdout.pipe(concat(function(data) {
+          // all your data ready to be used.
+      this.res.status(200).send({message: data.toString('utf-8').trim()});
+      console.log(data.toString('utf-8'));
+    }.bind({res:this.res})));
   }.bind({res: this.res}));
   file.pipe(upload);
 };

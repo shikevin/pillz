@@ -8,6 +8,7 @@ var COLORS = ['red', 'green', 'blue'];
 var handleNewPills = function(req, res) {
   // give frequency in seconds
   var pills = [];
+  console.log(req);
   pills = req.body.pills;
   console.log(pills);
   trackedPills = [];
