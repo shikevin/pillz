@@ -1,0 +1,9 @@
+Algorithm Structure (brain storming)
+
+1. Mask for red, blue, green
+2. Opening to get rid of the small noises
+3. rectangle cover to get the area covering the mask
+4. bit_wise that with the original image
+5. Apply watershed algorithm
+
+
