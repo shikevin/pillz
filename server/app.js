@@ -7,6 +7,8 @@ var apiRoutes = require('./routes/v1_router');
 app = exports.app = express();
 
 trackedPills = {};
+setIntervals = [];
+sockets = [];
 
 app.set('port', 5000);
 app.set('views', __dirname + '/views');
@@ -66,6 +68,8 @@ wsServer.on('request', function(request) {
     }
 
     var connection = request.accept('echo-protocol', request.origin);
+    // add socket to list
+    sockets.push(connection);
     console.log((new Date()) + ' Connection accepted.');
     connection.on('message', function(message) {
         if (message.type === 'utf8') {
@@ -79,5 +83,11 @@ wsServer.on('request', function(request) {
     });
     connection.on('close', function(reasonCode, description) {
         console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+        // remove sockets from list
+        for (var i = 0; i < sockets.length; i++) {
+          if (sockets[i].remoteAddress == connection.remoteAddress) {
+            sockets.splice(i, 1);
+          }
+        }
     });
 });
