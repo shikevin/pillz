@@ -8,7 +8,7 @@ client.connect(1337, '127.0.0.1', function() {
 
 client.on('data', function(data) {
   console.log('Received: ' + data);
-  client.destroy(); // kill client after server's response
+  console.log(data);
 });
 
 client.on('close', function() {

@@ -10,12 +10,12 @@ var handleNewPills = function(req, res) {
   var pills = [];
   pills = req.body.pills;
   pills = req.body.pills;
-  console.log(pills);
+  console.log("PILLS: " + pills);
   trackedPills = [];
   removeCurrentScheduled();
   for (var i = 0; i < pills.length; i++) {
     pill = pills[i];
-    pill['color'] = COLORS[i];
+    pill.color = COLORS[i];
     addSchedule(pill);
     trackedPills.push(pill);
   }
@@ -42,7 +42,7 @@ var removeCurrentScheduled = function() {
 
 var getCurrentPills = function(req, res) {
   res.send({message: trackedPills});
-}
+};
 
 router.post('/', handleNewPills);
 
